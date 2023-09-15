@@ -1,19 +1,27 @@
 from pathlib import Path
 from decouple import config
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Define the base directory of the Django project.
+# This is used for constructing absolute paths to various resources.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Fetch the secret key from environment or a .env file.
+# This key is used for cryptographic signing in Django.
 SECRET_KEY = config("SECRET_KEY")
 
+# Fetch the DEBUG setting from environment or a .env file.
+# It determines if the application is in debug mode (not recommended for production).
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+# A list of IP addresses or hostnames which can be used to access the application.
+# Should be updated for production to restrict access.
 ALLOWED_HOSTS = []
 
 
 # Application definition
 
+# List of applications (both built-in and custom) that are enabled for this Django project.
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -26,6 +34,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
 ]
 
+# List of middleware classes that process request and response globally.
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -36,8 +45,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# The main URL configuration for the project.
 ROOT_URLCONF = "myproject.urls"
 
+# Configuration for Django's templating system.
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -54,12 +65,13 @@ TEMPLATES = [
     },
 ]
 
+# WSGI configuration for serving the Django application.
 WSGI_APPLICATION = "myproject.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+# Here, PostgreSQL is used as the database with credentials fetched from environment or .env file.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -71,8 +83,8 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+# Validators for user passwords.
+# They ensure passwords adhere to certain security standards.
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -90,30 +102,27 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# Settings for internationalization and localization.
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
+# Settings for static files (CSS, JS, images).
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
+# Default type for auto-generated primary key fields.
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Specifies a custom user model named "CustomUser" in the "users" app.
 AUTH_USER_MODEL = "users.CustomUser"
 
+# Configuration for Django Rest Framework (DRF).
+# It specifies authentication, parsing, and permission settings for DRF.
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
@@ -126,6 +135,8 @@ REST_FRAMEWORK = {
     ),
 }
 
+# Configuration for logging in Django.
+# Currently, logs of level DEBUG are printed to the console for 'django' and 'users' modules.
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
