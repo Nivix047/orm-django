@@ -27,8 +27,21 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     # between Django models and JSON representations.
     serializer_class = CustomUserSerializer
 
+    # Set default permission class
+    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        # If the action is 'register', then allow any user
+        if self.action == 'register':
+            permission_classes = [AllowAny]
+        else:
+            # For other actions (like 'list', 'create', 'retrieve', 'update', 'partial_update', 'destroy'),
+            # only allow authenticated users
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
     # Define a custom action for this ViewSet. This action will handle user registration.
-    @action(detail=False, methods=['POST'], permission_classes=[AllowAny])
+    @action(detail=False, methods=['POST'])
     def register(self, request):
         # Log an informational message whenever this endpoint is accessed.
         logger.info("Register endpoint accessed.")
