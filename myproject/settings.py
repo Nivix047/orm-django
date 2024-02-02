@@ -16,7 +16,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 # A list of IP addresses or hostnames which can be used to access the application.
 # Should be updated for production to restrict access.
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
