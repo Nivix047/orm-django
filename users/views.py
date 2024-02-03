@@ -7,9 +7,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
-
 from .models import CustomUser
 from .serializers import CustomUserSerializer
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 # Initialize the logger for this module
 logger = logging.getLogger(__name__)
@@ -41,6 +42,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     # Define a custom action for this ViewSet. This action will handle user registration.
+    @swagger_auto_schema(methods=['post'], request_body=CustomUserSerializer, responses={201: CustomUserSerializer})
     @action(detail=False, methods=['POST'])
     def register(self, request):
         # Log an informational message whenever this endpoint is accessed.
@@ -65,7 +67,14 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 
 # Define a function-based view to handle user login.
 
-
+@swagger_auto_schema(method='post', request_body=openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+        'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
+    }),
+    responses={200: openapi.Response('Successful Login', examples={"application/json": {"token": "string", "user_id": 0}})}
+)
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def login_view(request):
